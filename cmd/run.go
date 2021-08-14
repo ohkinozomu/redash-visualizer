@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"log"
-	"os"
 	"strings"
 
 	"github.com/goccy/go-graphviz"
@@ -17,6 +16,7 @@ func init() {
 	rootCmd.AddCommand(runCmd)
 	runCmd.PersistentFlags().String("host", "", "host")
 	runCmd.PersistentFlags().String("api-key", "", "api-key")
+	runCmd.PersistentFlags().String("file", "graph.png", "file name")
 }
 
 func addGroupsNodes(graph *cgraph.Graph, groups *[]redash.Group) error {
@@ -79,7 +79,7 @@ func addUsersNodes(graph *cgraph.Graph, users *redash.UserList) error {
 	return nil
 }
 
-func renderGraph(c *redash.Client, ds *[]redash.DataSource, groups *[]redash.Group, users *redash.UserList) error {
+func renderGraph(c *redash.Client, ds *[]redash.DataSource, groups *[]redash.Group, users *redash.UserList, fileName string) error {
 	g := graphviz.New()
 	graph, err := g.Graph()
 	if err != nil {
@@ -112,7 +112,7 @@ func renderGraph(c *redash.Client, ds *[]redash.DataSource, groups *[]redash.Gro
 		return err
 	}
 
-	if err := g.RenderFilename(graph, graphviz.PNG, "graph.png"); err != nil {
+	if err := g.RenderFilename(graph, graphviz.PNG, fileName); err != nil {
 		return err
 	}
 
@@ -129,19 +129,14 @@ var runCmd = &cobra.Command{
 			panic(err)
 		}
 
-		if host == "" {
-			fmt.Println("error: Set host")
-			os.Exit(1)
-		}
-
 		apiKey, err := cmd.PersistentFlags().GetString("api-key")
 		if err != nil {
 			panic(err)
 		}
 
-		if apiKey == "" {
-			fmt.Println("error: Set api-key")
-			os.Exit(1)
+		fileName, err := cmd.PersistentFlags().GetString("file")
+		if err != nil {
+			panic(err)
 		}
 
 		if !(strings.HasPrefix(host, "http://") || strings.HasPrefix(host, "https://")) {
@@ -174,7 +169,7 @@ var runCmd = &cobra.Command{
 			log.Fatal(err)
 		}
 
-		err = renderGraph(c, ds, groups, users)
+		err = renderGraph(c, ds, groups, users, fileName)
 		if err != nil {
 			log.Fatal(err)
 		}

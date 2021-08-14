@@ -8,4 +8,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Run E2E
-        run: run-redash/run-redash.sh
+        run: |
+          run-redash/run-redash.sh
+          export PGPASSWORD=password
+          API_KEY=`psql postgres://postgres:password@localhost:5432/postgres -c "select api_key from users where name='root_user'" -t -A`
+          go run main.go run --host localhost:5000 --api-key $API_KEY --file graph.png

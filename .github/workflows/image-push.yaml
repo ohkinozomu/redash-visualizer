@@ -18,11 +18,20 @@ jobs:
     - name: Run redash-visualizer
       run: |
         run-redash/run-redash.sh
+        export PGPASSWORD=password
+        API_KEY=`psql postgres://postgres:password@localhost:5432/postgres -c "select api_key from users where name='root_user'" -t -A`
+        go run main.go run --host localhost:5000 --api-key $API_KEY --file graph_new.png
+    - name: Diff Images
+      shell: bash -x {0}
+      run: |
+        if ! diff graph_sample.png graph_new.png; then
+          mv graph_new.png diff graph_sample.png
+        fi
     - name: Commit file
       shell: bash -x {0}
       run: |
         if ! git diff --exit-code --quiet; then
-          git add graph.png
+          git add graph_sample.png
           git commit -m "Update image"
           git push origin main
         else
