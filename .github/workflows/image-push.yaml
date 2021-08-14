@@ -20,8 +20,7 @@ jobs:
         run-redash/run-redash.sh
     - name: Commit file
       run: |
-        git diff --exit-code --quiet
-        if [ $? -eq 1 ]; then
+        if ! git diff --exit-code --quiet; then
           git add graph.png
           git commit -m "Update image"
           git push origin main
