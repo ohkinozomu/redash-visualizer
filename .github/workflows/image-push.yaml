@@ -1,0 +1,25 @@
+name: Push Image
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Configure Git
+      run: |
+        git config user.name "$GITHUB_ACTOR"
+        git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+    - name: Run redash-visualizer
+      run: |
+        run-redash/run-redash.sh
+    - name: Commit file
+      run: |
+        git add graph.png
+        git commit -m "Update image"
+        git push origin main
