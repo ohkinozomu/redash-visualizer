@@ -26,5 +26,5 @@ jobs:
           git commit -m "Update image"
           git push origin main
         else
-          exit
+          exit 0
         fi
