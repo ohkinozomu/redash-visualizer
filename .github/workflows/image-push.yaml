@@ -19,6 +19,7 @@ jobs:
       run: |
         run-redash/run-redash.sh
     - name: Commit file
+      shell: bash -x {0}
       run: |
         if ! git diff --exit-code --quiet; then
           git add graph.png
