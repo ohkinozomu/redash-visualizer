@@ -21,7 +21,7 @@ services:
     ports:
       - "5432:5432"
   redis:
-    image: redis:5.0-alpine
+    image: redis:6.2-alpine
     restart: always
     ports:
       - "6379:6379"
