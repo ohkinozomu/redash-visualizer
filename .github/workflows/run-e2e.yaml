@@ -1,0 +1,11 @@
+name: Run E2E
+on: push
+jobs:
+  test:
+    name: Run E2E
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Run E2E
+        run: run-redash/run-redash.sh
