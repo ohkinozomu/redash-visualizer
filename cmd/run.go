@@ -18,6 +18,7 @@ func init() {
 	runCmd.PersistentFlags().String("api-key", "", "api-key")
 	runCmd.PersistentFlags().String("file", "graph.png", "file name")
 	runCmd.PersistentFlags().String("layout", "dot", "layout")
+	runCmd.PersistentFlags().String("format", "png", "file format")
 }
 
 func addGroupsNodes(graph *cgraph.Graph, groups *[]redash.Group) error {
@@ -80,7 +81,7 @@ func addUsersNodes(graph *cgraph.Graph, users *redash.UserList) error {
 	return nil
 }
 
-func renderGraph(c *redash.Client, ds *[]redash.DataSource, groups *[]redash.Group, users *redash.UserList, fileName string, layout string) error {
+func renderGraph(c *redash.Client, ds *[]redash.DataSource, groups *[]redash.Group, users *redash.UserList, fileName, layout, fileFormat string) error {
 	g := graphviz.New()
 	g.SetLayout(graphviz.Layout(layout))
 
@@ -112,11 +113,11 @@ func renderGraph(c *redash.Client, ds *[]redash.DataSource, groups *[]redash.Gro
 	}
 
 	var buf bytes.Buffer
-	if err := g.Render(graph, graphviz.PNG, &buf); err != nil {
+	if err := g.Render(graph, graphviz.Format(fileFormat), &buf); err != nil {
 		return err
 	}
 
-	if err := g.RenderFilename(graph, graphviz.PNG, fileName); err != nil {
+	if err := g.RenderFilename(graph, graphviz.Format(fileFormat), fileName); err != nil {
 		return err
 	}
 
@@ -144,6 +145,11 @@ var runCmd = &cobra.Command{
 		}
 
 		layout, err := cmd.PersistentFlags().GetString("layout")
+		if err != nil {
+			panic(err)
+		}
+
+		fileFormat, err := cmd.PersistentFlags().GetString("format")
 		if err != nil {
 			panic(err)
 		}
@@ -178,7 +184,7 @@ var runCmd = &cobra.Command{
 			log.Fatal(err)
 		}
 
-		err = renderGraph(c, ds, groups, users, fileName, layout)
+		err = renderGraph(c, ds, groups, users, fileName, layout, fileFormat)
 		if err != nil {
 			log.Fatal(err)
 		}
