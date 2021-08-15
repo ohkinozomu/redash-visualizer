@@ -23,10 +23,12 @@ func init() {
 
 func addGroupsNodes(graph *cgraph.Graph, groups *[]redash.Group) error {
 	for _, v := range *groups {
-		_, err := graph.CreateNode(v.Name)
+		gn, err := graph.CreateNode(v.Name)
 		if err != nil {
 			return err
 		}
+		gn.SetFillColor("lightblue1")
+		gn.SetStyle(cgraph.FilledNodeStyle)
 	}
 	return nil
 }
