@@ -1,0 +1,20 @@
+name: Upload PNG
+on: push
+jobs:
+  test:
+    name: Upload PNG
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Run redash-visualizer
+        run: |
+          run-redash/run-redash.sh
+          export PGPASSWORD=password
+          API_KEY=`psql postgres://postgres:password@localhost:5432/postgres -c "select api_key from users where name='root_user'" -t -A`
+          go run main.go run --host localhost:5000 --api-key $API_KEY --file graph_pr.png
+      - name: Upload image
+        uses: actions/upload-artifact@v2
+        with:
+          name: graph
+          path: graph_pr.png
