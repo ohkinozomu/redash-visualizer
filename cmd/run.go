@@ -17,7 +17,7 @@ func init() {
 	runCmd.PersistentFlags().String("host", "", "host")
 	runCmd.PersistentFlags().String("api-key", "", "api-key")
 	runCmd.PersistentFlags().String("file", "graph.png", "file name")
-	runCmd.PersistentFlags().String("layout", "dot", "layout")
+	runCmd.PersistentFlags().String("layout", "sfdp", "layout")
 	runCmd.PersistentFlags().String("format", "png", "file format")
 }
 
