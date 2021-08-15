@@ -25,7 +25,7 @@ jobs:
       shell: bash -x {0}
       run: |
         if ! diff graph_sample.png graph_new.png; then
-          mv graph_new.png diff graph_sample.png
+          mv graph_new.png graph_sample.png
         fi
     - name: Commit file
       shell: bash -x {0}
