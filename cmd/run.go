@@ -22,8 +22,9 @@ func init() {
 }
 
 func addGroupsNodes(graph *cgraph.Graph, groups *[]redash.Group) error {
+	log.Println("Adding group nodes...")
 	for _, v := range *groups {
-		gn, err := graph.CreateNode(v.Name)
+		gn, err := graph.CreateNode("group: " + v.Name)
 		if err != nil {
 			return err
 		}
@@ -34,8 +35,9 @@ func addGroupsNodes(graph *cgraph.Graph, groups *[]redash.Group) error {
 }
 
 func addDataSourcesNodes(c *redash.Client, graph *cgraph.Graph, ds *[]redash.DataSource, groups *[]redash.Group) error {
+	log.Println("Adding data source nodes...")
 	for _, v := range *ds {
-		dsn, err := graph.CreateNode(v.Name)
+		dsn, err := graph.CreateNode("data source: " + v.Name)
 		if err != nil {
 			return err
 		}
@@ -47,13 +49,15 @@ func addDataSourcesNodes(c *redash.Client, graph *cgraph.Graph, ds *[]redash.Dat
 		if err != nil {
 			return err
 		}
+
 		for i := range ads.Groups {
 			for _, g := range *groups {
 				if g.ID == i {
-					gn, err := graph.Node(g.Name)
+					gn, err := graph.Node("group: " + g.Name)
 					if err != nil {
 						log.Fatal(err)
 					}
+					log.Println("creating edge: " + g.Name + " to " + dsn.Name())
 					_, err = graph.CreateEdge("", gn, dsn)
 					if err != nil {
 						log.Fatal(err)
@@ -66,8 +70,10 @@ func addDataSourcesNodes(c *redash.Client, graph *cgraph.Graph, ds *[]redash.Dat
 }
 
 func addUsersNodes(graph *cgraph.Graph, users *redash.UserList) error {
+	log.Println("Adding user nodes...")
+
 	for _, v := range users.Results {
-		un, err := graph.CreateNode(v.Name)
+		un, err := graph.CreateNode("user: " + v.Name)
 		if err != nil {
 			return err
 		}
@@ -76,11 +82,12 @@ func addUsersNodes(graph *cgraph.Graph, users *redash.UserList) error {
 		un.SetStyle(cgraph.FilledNodeStyle)
 
 		for _, g := range v.Groups {
-			gn, err := graph.Node(g.Name)
+			gn, err := graph.Node("group: " + g.Name)
 			if err != nil {
 				log.Fatal(err)
 			}
 
+			log.Println("creating edge: " + un.Name() + " to " + gn.Name())
 			_, err = graph.CreateEdge("", un, gn)
 			if err != nil {
 				log.Fatal(err)
