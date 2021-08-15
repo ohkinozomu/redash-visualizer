@@ -17,6 +17,7 @@ func init() {
 	runCmd.PersistentFlags().String("host", "", "host")
 	runCmd.PersistentFlags().String("api-key", "", "api-key")
 	runCmd.PersistentFlags().String("file", "graph.png", "file name")
+	runCmd.PersistentFlags().String("layout", "dot", "layout")
 }
 
 func addGroupsNodes(graph *cgraph.Graph, groups *[]redash.Group) error {
@@ -79,12 +80,15 @@ func addUsersNodes(graph *cgraph.Graph, users *redash.UserList) error {
 	return nil
 }
 
-func renderGraph(c *redash.Client, ds *[]redash.DataSource, groups *[]redash.Group, users *redash.UserList, fileName string) error {
+func renderGraph(c *redash.Client, ds *[]redash.DataSource, groups *[]redash.Group, users *redash.UserList, fileName string, layout string) error {
 	g := graphviz.New()
+	g.SetLayout(graphviz.Layout(layout))
+
 	graph, err := g.Graph()
 	if err != nil {
 		return err
 	}
+
 	defer func() {
 		if err := graph.Close(); err != nil {
 			log.Fatal(err)
@@ -139,6 +143,11 @@ var runCmd = &cobra.Command{
 			panic(err)
 		}
 
+		layout, err := cmd.PersistentFlags().GetString("layout")
+		if err != nil {
+			panic(err)
+		}
+
 		if !(strings.HasPrefix(host, "http://") || strings.HasPrefix(host, "https://")) {
 			host = "http://" + host
 		}
@@ -169,7 +178,7 @@ var runCmd = &cobra.Command{
 			log.Fatal(err)
 		}
 
-		err = renderGraph(c, ds, groups, users, fileName)
+		err = renderGraph(c, ds, groups, users, fileName, layout)
 		if err != nil {
 			log.Fatal(err)
 		}
