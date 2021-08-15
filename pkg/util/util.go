@@ -3,7 +3,7 @@ package util
 import (
 	"strings"
 
-	"github.com/snowplow-devops/redash-client-go/redash"
+	"github.com/ohkinozomu/redash-client-go/redash"
 )
 
 func JoinDataSources(ds *[]redash.DataSource) string {

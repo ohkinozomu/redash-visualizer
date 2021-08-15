@@ -8,7 +8,7 @@ import (
 
 	"github.com/goccy/go-graphviz"
 	"github.com/goccy/go-graphviz/cgraph"
-	"github.com/snowplow-devops/redash-client-go/redash"
+	"github.com/ohkinozomu/redash-client-go/redash"
 	"github.com/spf13/cobra"
 
 	"github.com/ohkinozomu/redash-visualizer/pkg/util"
@@ -199,7 +199,7 @@ var runCmd = &cobra.Command{
 		}
 		log.Println("groups: " + util.JoinGroups(groups))
 
-		users, err := c.GetUsers()
+		users, err := c.GetUsers(100)
 		if err != nil {
 			log.Fatal(err)
 		}
