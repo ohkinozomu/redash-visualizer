@@ -40,6 +40,9 @@ func addDataSourcesNodes(c *redash.Client, graph *cgraph.Graph, ds *[]redash.Dat
 			return err
 		}
 
+		dsn.SetFillColor("lightgrey")
+		dsn.SetStyle(cgraph.FilledNodeStyle)
+
 		ads, err := c.GetDataSource(v.ID)
 		if err != nil {
 			return err
@@ -74,6 +77,10 @@ func addUsersNodes(graph *cgraph.Graph, users *redash.UserList) error {
 			if err != nil {
 				log.Fatal(err)
 			}
+
+			gn.SetFillColor("lightpink")
+			gn.SetStyle(cgraph.FilledNodeStyle)
+
 			_, err = graph.CreateEdge("", un, gn)
 			if err != nil {
 				log.Fatal(err)
