@@ -10,6 +10,8 @@ import (
 	"github.com/goccy/go-graphviz/cgraph"
 	"github.com/snowplow-devops/redash-client-go/redash"
 	"github.com/spf13/cobra"
+
+	"github.com/ohkinozomu/redash-visualizer/pkg/util"
 )
 
 func init() {
@@ -189,16 +191,19 @@ var runCmd = &cobra.Command{
 		if err != nil {
 			log.Fatal(err)
 		}
+		log.Println("data sources: " + util.JoinDataSources(ds))
 
 		groups, err := c.GetGroups()
 		if err != nil {
 			log.Fatal(err)
 		}
+		log.Println("groups: " + util.JoinGroups(groups))
 
 		users, err := c.GetUsers()
 		if err != nil {
 			log.Fatal(err)
 		}
+		log.Println("users: " + util.JoinUsers(users))
 
 		err = renderGraph(c, ds, groups, users, fileName, layout, fileFormat)
 		if err != nil {
