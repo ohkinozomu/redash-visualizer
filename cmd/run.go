@@ -72,14 +72,14 @@ func addUsersNodes(graph *cgraph.Graph, users *redash.UserList) error {
 			return err
 		}
 
+		un.SetFillColor("lightpink")
+		un.SetStyle(cgraph.FilledNodeStyle)
+
 		for _, g := range v.Groups {
 			gn, err := graph.Node(g.Name)
 			if err != nil {
 				log.Fatal(err)
 			}
-
-			gn.SetFillColor("lightpink")
-			gn.SetStyle(cgraph.FilledNodeStyle)
 
 			_, err = graph.CreateEdge("", un, gn)
 			if err != nil {
