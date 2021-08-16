@@ -16,7 +16,7 @@ builds:
     - goos: linux
       goarch: 386
     - goos: linux
-      goarch: arm
+      goarch: arm64
   - id: darwin-build
     ldflags:
     - -s
