@@ -5,5 +5,5 @@
 ## Use
 
 ```
-$ go run main.go run --host [host] --api-key [api-key] --file graph.png --layout dot --format png
+$ redash-visualizer run --host [host] --api-key [api-key] --file graph.png --layout dot --format png
 ```
