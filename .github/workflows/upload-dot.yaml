@@ -16,7 +16,7 @@ jobs:
           API_KEY=`psql postgres://postgres:password@localhost:5432/postgres -c "select api_key from users where name='root_user'" -t -A`
           go run main.go run --host localhost:5000 --api-key $API_KEY --file graph_pr.dot --format dot
       - name: Upload DOT
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: graph
           path: graph_pr.dot
