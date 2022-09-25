@@ -1,6 +1,6 @@
 module github.com/ohkinozomu/redash-visualizer
 
-go 1.16
+go 1.19
 
 require (
 	github.com/goccy/go-graphviz v0.0.9
