@@ -14,7 +14,7 @@ services:
     environment:
       REDASH_WEB_WORKERS: 4
   postgres:
-    image: postgres:13.4-alpine
+    image: postgres:15.1-alpine
     restart: always
     environment: 
       POSTGRES_PASSWORD: password
